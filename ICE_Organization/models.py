@@ -8,6 +8,7 @@ def generate_uuid(model_type: str):
 class Organization(models.Model):
     """
     组织类 (ORGA)。
+    
     :cvar name: 组织名称
     :cvar description: 组织描述
     :ivar classrooms: 组织包含的教室列表 (定义在 Classroom 类中)
