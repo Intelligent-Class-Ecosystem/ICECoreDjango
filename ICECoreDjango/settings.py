@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',   # 管理静态文件的框架
 
     "test_app.apps.TestAppConfig",  # 测试应用
+
+    "ICE_Organization.apps.IceOrganizationConfig",
 ]
 
 MIDDLEWARE = [

@@ -11,6 +11,13 @@ class Organization(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
 
+    def get_dict(self):
+        return {
+            'name': self.name,
+            'description': self.description,
+            'classrooms': [classroom.get_dict() for classroom in self.classrooms.all()],
+        }
+
 class Classroom(models.Model):
     """
     教室类。
@@ -25,6 +32,16 @@ class Classroom(models.Model):
     description = models.TextField()
     belong_organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='classrooms')
 
+
+    def get_dict(self):
+        return {
+            'name': self.name,
+            'description': self.description,
+            # 'belong_organization': self.belong_organization.get_dict(),
+            'cycles': [cycle.get_dict() for cycle in self.cycles.all()],
+            'today_timetable': self.today_timetable.get_dict() if hasattr(self, "today_timetable") else None,
+        }
+
 class Cycle(models.Model):
     """
     周期类。
@@ -37,6 +54,12 @@ class Cycle(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
     belong_classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE, related_name='cycles')
+    def get_dict(self):
+        return {
+            'name': self.name,
+            'description': self.description,
+            'timetables': [timetable.get_dict() for timetable in self.timetables.all()],
+        }
 
 class Timetable(models.Model):
     """
@@ -55,6 +78,13 @@ class Timetable(models.Model):
     # 从属的变量
     belong_cycle = models.ManyToManyField(Cycle, related_name='timetables')
     belong_today = models.OneToOneField(Classroom, on_delete=models.CASCADE, related_name='today_timetable')
+    def get_dict(self):
+        return {
+            'name': self.name,
+            'description': self.description,
+            'date': self.date,
+            'periods': [period.get_dict() for period in self.periods.all()],
+        }
 
 class Activity(models.Model):
     """
@@ -66,6 +96,12 @@ class Activity(models.Model):
     """
     name = models.CharField(max_length=100)
     description = models.TextField()
+
+    def get_dict(self):
+        return {
+            'name': self.name,
+            'description': self.description,
+        }
 
 class Period(models.Model):
     """
@@ -83,6 +119,13 @@ class Period(models.Model):
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='belong_periods')
     # 从属的变量
     belong_timetables = models.ManyToManyField(Timetable, related_name='periods')
+
+    def get_dict(self):
+        return {
+            'start_time': self.start_time,
+            'end_time': self.end_time,
+            'activity': self.activity.get_dict() if hasattr(self, "activity") else None,
+        }
 
 
 

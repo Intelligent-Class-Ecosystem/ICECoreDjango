@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <title>{{ organization.name }} 详情</title>
+    </head>
+    <body>
+        <h1>{{ organization.name }}</h1>
+        <p><strong>组织描述:</strong> {{ organization.description }}</p>
+
+        <h2>组织包含的教室</h2>
+        {% if organization.classrooms.all %}
+            <ul>
+            {% for classroom in organization.classrooms.all %}
+                <li>
+                    <h3>{{ classroom.name }}</h3>
+                    <p><strong>教室描述:</strong> {{ classroom.description }}</p>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>该组织暂无教室。</p>
+        {% endif %}
+    </body>
+</html>
