@@ -1,0 +1,73 @@
+# ====================
+# 通用忽略项
+# ====================
+# 虚拟环境
+venv/
+env/
+.venv/
+pipenv/
+__pypackages__/
+
+# Python 编译文件
+*.py[cod]
+__pycache__/
+
+# 包构建产物
+dist/
+build/
+*.egg
+*.egg-info/
+*.whl
+
+# 日志与临时文件
+*.log
+*.pot
+*.po
+*.tmp
+*.swp
+*.swo
+
+# ====================
+# Django 特定忽略项
+# ====================
+# SQLite 数据库（本地开发用，勿提交）
+# *.sqlite3
+# db.sqlite3
+# ↑ 先暂时不ban，给各位测试功能
+db.sqlite3-journal
+
+# 静态文件收集目录（通过 collectstatic 生成）
+staticfiles/
+
+# 媒体文件（用户上传内容，通常由云存储管理）
+media/
+
+# 本地配置（敏感信息或环境特定配置）
+*.local.py
+local_settings.py
+.env
+.env.*
+!.env.example  # 保留示例文件提示用户创建本地环境变量
+
+# ====================
+# 编辑器/IDE 临时文件
+# ====================
+# VS Code
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# PyCharm
+.idea/
+*.iml
+*.iws
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+# Vim
+*.swp
+*.swo
