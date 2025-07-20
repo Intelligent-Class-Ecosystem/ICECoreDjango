@@ -13,7 +13,7 @@ class Organization(models.Model):
     :cvar description: 组织描述
     :ivar classrooms: 组织包含的教室列表 (定义在 Classroom 类中)
     """
-    id = generate_uuid("ORGA")
+    id = models.CharField(max_length=48, default=generate_uuid("ORGA"), unique=True)
     name = models.CharField(max_length=100)
     description = models.TextField()
     def get_dict(self):
@@ -33,7 +33,7 @@ class Classroom(models.Model):
     :ivar classrooms: 教室包含的周期列表 (定义在 Cycle 类中)
     :ivar today_timetable: 教室的今天的课程表 (定义在 Timetable 类中)
     """
-    id = generate_uuid("CLSR")
+    id = models.CharField(max_length=48, default=generate_uuid("CLSR"), unique=True)
     name = models.CharField(max_length=100)
     description = models.TextField()
     belong_organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='classrooms')
@@ -55,9 +55,9 @@ class Cycle(models.Model):
     :cvar name: 周期名称
     :cvar description: 周期描述
     :cvar belong_classroom: 【从属关系变量】周期所属的教室
-    :ivar cycles: 周期包含的时间表列表 (定义在 Timetable 类中)
+    :ivar timetables: 周期包含的时间表列表 (定义在 Timetable 类中)
     """
-    id = generate_uuid("CYCL")
+    id = models.CharField(max_length=48, default=generate_uuid("CYCL"), unique=True)
     name = models.CharField(max_length=100)
     description = models.TextField()
     belong_classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE, related_name='cycles')
@@ -79,7 +79,7 @@ class Timetable(models.Model):
     :cvar belong_today: 【从属关系变量】时间表所属的今天的课程表
     :ivar periods: 时间表包含的时间段列表 (定义在 Period 类中)
     """
-    id = generate_uuid("TITB")
+    id = models.CharField(max_length=48, default=generate_uuid("TITB"), unique=True)
     name = models.CharField(max_length=100)
     description = models.TextField()
     date = models.DateField()
@@ -102,7 +102,7 @@ class Activity(models.Model):
     :cvar description: 活动简介
     :cvar belong_periods: 活动所属的时间段 (定义在 Period 类中)
     """
-    id = generate_uuid("ACTI")
+    id = models.CharField(max_length=48, default=generate_uuid("ACTI"), unique=True)
     name = models.CharField(max_length=100)
     description = models.TextField()
 
@@ -111,6 +111,13 @@ class Activity(models.Model):
             'name': self.name,
             'description': self.description,
         }
+
+"""
+class ActivityGroup(Activity):
+    id = models.CharField(max_length=48, default=generate_uuid("AGRP"))
+"""
+
+EMPTY_ACTIVITY = Activity.objects.create(id='EMPTY_ACTIVITY', name='EMPTY_ACTIVITY', description='EMPTY_ACTIVITY', belong_periods=[])
 
 class Period(models.Model):
     """
@@ -123,10 +130,10 @@ class Period(models.Model):
     :cvar activity: 时间段内的活动
     :cvar belong_timetables: 【从属关系变量】时间段所属的时间表
     """
-    id = generate_uuid("PERI")
+    id = models.CharField(max_length=48, default=generate_uuid("PERI"), unique=True)
     start_time = models.TimeField()
     end_time = models.TimeField()
-    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='belong_periods')
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='belong_periods', default=EMPTY_ACTIVITY)
     # 从属的变量
     belong_timetables = models.ManyToManyField(Timetable, related_name='periods')
 
