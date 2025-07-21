@@ -1,10 +1,19 @@
-from django.urls import path
+from django.urls import path, include
+
+from rest_framework.routers import DefaultRouter
+
 from . import views
+from .views import OrganizationAPIViewSet
 
 app_name = "ICE_Organization"
 
+router = DefaultRouter()
+router.register('organization', OrganizationAPIViewSet)
+
 urlpatterns = [
     # path("", views.index, name="index"),
+    path('', include(router.urls)),
+    path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     path("temp_get_token/", views.temp_get_token, name="temp_get_token"),
     path("create_organization/", views.create_organization, name="create_organization"),
     path("create_classroom/", views.create_classroom, name="create_classroom"),
